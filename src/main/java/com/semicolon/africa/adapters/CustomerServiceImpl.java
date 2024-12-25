@@ -1,10 +1,16 @@
 package com.semicolon.africa.adapters;
 
+import com.semicolon.africa.adapters.Exceptions.CustomerNotFoundException;
 import com.semicolon.africa.domain.Customer;
 import com.semicolon.africa.domain.constants.LoginStatus;
 import com.semicolon.africa.ports.in.CustomerService;
+import com.semicolon.africa.ports.in.dtos.request.LoginCustomerRequest;
+import com.semicolon.africa.ports.in.dtos.request.LogoutCustomerRequest;
 import com.semicolon.africa.ports.in.dtos.request.RegisterCustomerRequest;
 import com.semicolon.africa.ports.out.CustomerRepository;
+import com.semicolon.africa.ports.out.dtos.response.CustomerLoginResponse;
+import com.semicolon.africa.ports.out.dtos.response.CustomerLogoutResponse;
+import com.semicolon.africa.ports.out.dtos.response.CustomerRegisterResponse;
 import com.semicolon.africa.ports.out.dtos.response.RegisterCustomerResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +42,33 @@ public class CustomerServiceImpl implements CustomerService {
         response.setMessage("Registered Customer Successfully !!!");
         return response;
     }
-//
-//    @Override
-//    public void loginCustomer(LoginCustomerRequest customerRequest) {
-//
-//    }
-//
-//    @Override
-//    public void logoutCustomer(LogoutCustomerRequest customerRequest) {
-//
-//    }
+
+    @Override
+    public CustomerLoginResponse loginCustomer(LoginCustomerRequest customerRequest) {
+        Customer customer = customerRepository.findCustomerByCustomerId(customerRequest.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException("Customer not found\nPlease try again !!!"));
+        if (customer.getIsLoggedIn() == LoginStatus.OFFLINE) {
+            customer.setIsLoggedIn(LoginStatus.valueOf(LoginStatus.ONLINE.toString()));
+            customerRepository.save(customer);
+            CustomerLoginResponse response = new CustomerLoginResponse();
+            response.setMessage("Customer Logged In Successfully !!!");
+            return response;
+        }
+        throw new CustomerNotFoundException("Invalid Entry\nPlease try again !!!");
+    }
+
+    @Override
+    public CustomerLogoutResponse logoutCustomer(LogoutCustomerRequest customerRequest) {
+        Customer customer = customerRepository.findCustomerByCustomerId(customerRequest.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException("Customer not found\nPlease try again !!!"));
+        if (customer.getIsLoggedIn() == LoginStatus.ONLINE) {
+            customer.setIsLoggedIn(LoginStatus.valueOf(LoginStatus.OFFLINE.toString()));
+            customerRepository.save(customer);
+            CustomerLogoutResponse response = new CustomerLogoutResponse();
+            response.setMessage("Customer Logged In Successfully !!!");
+            return response;
+        }
+        throw new CustomerNotFoundException("Invalid Entry\nPlease try again !!!");
+
+    }
 //
 //    @Override
 //    public void findTechnicianByRating(RatingFindTechnicianRequest customerRequest) {

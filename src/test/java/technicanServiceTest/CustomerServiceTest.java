@@ -2,7 +2,11 @@ package technicanServiceTest;
 
 import com.semicolon.africa.Main;
 import com.semicolon.africa.ports.in.CustomerService;
+import com.semicolon.africa.ports.in.dtos.request.CustomerRegisterRequest;
+import com.semicolon.africa.ports.in.dtos.request.LoginCustomerRequest;
 import com.semicolon.africa.ports.in.dtos.request.RegisterCustomerRequest;
+import com.semicolon.africa.ports.out.dtos.response.CustomerLoginResponse;
+import com.semicolon.africa.ports.out.dtos.response.CustomerRegisterResponse;
 import com.semicolon.africa.ports.out.dtos.response.RegisterCustomerResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +42,15 @@ public class CustomerServiceTest {
 
     @Test
     public void testThatCustomerCanLogin(){
-
+        LoginCustomerRequest request = customerLoginRequest();
+        CustomerLoginResponse response = customerService.loginCustomer(request);
+        assertNotNull(response);
     }
 
-    private void customerLoginRequest(){
-        
+    private LoginCustomerRequest customerLoginRequest(){
+        LoginCustomerRequest request = new LoginCustomerRequest();
+        request.setCustomerId(1L);
+        return request;
     }
 
 
