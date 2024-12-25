@@ -1,12 +1,10 @@
 package com.semicolon.africa.ports.in;
 
+import com.semicolon.africa.ports.in.dtos.request.CreateReviewRequest;
 import com.semicolon.africa.ports.in.dtos.request.LoginCustomerRequest;
 import com.semicolon.africa.ports.in.dtos.request.LogoutCustomerRequest;
 import com.semicolon.africa.ports.in.dtos.request.RegisterCustomerRequest;
-import com.semicolon.africa.ports.out.dtos.response.CustomerLoginResponse;
-import com.semicolon.africa.ports.out.dtos.response.CustomerLogoutResponse;
-import com.semicolon.africa.ports.out.dtos.response.CustomerRegisterResponse;
-import com.semicolon.africa.ports.out.dtos.response.RegisterCustomerResponse;
+import com.semicolon.africa.ports.out.dtos.response.*;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +15,7 @@ public interface CustomerService {
     CustomerLogoutResponse logoutCustomer(LogoutCustomerRequest customerRequest);
 //    void findTechnicianByRating(RatingFindTechnicianRequest customerRequest);
 //    void findTechnicianByLocation(LocationFindTechnicianRequest customerRequest);
-//    void createReview(createReviewRequest customerRequest);
-//    void updateReview(updatetReviewRequest customerRequest);
+    CreateReviewResponse createReview(CreateReviewRequest customerRequest);
+//    void updateReview(UpdateReviewRequest customerRequest);
 
 }

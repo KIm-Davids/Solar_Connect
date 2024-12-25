@@ -24,15 +24,6 @@ public class Technician extends User {
     private UserType userType;
     @Enumerated(EnumType.STRING)
     private SubscriptionType subscriptionType;
-//    private String firstName;
-//    private String lastName;
-//    @Column(unique = true)
-//    private String phoneNumber;
-//    @Column(unique = true)
-//    private String email;
-//    private String password;
-//    private String location;
-//    private String nin;
     @Enumerated(EnumType.STRING)
     private Availability isAvailable;
 }

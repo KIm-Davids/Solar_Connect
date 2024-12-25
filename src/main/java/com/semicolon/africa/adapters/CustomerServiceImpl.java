@@ -2,19 +2,21 @@ package com.semicolon.africa.adapters;
 
 import com.semicolon.africa.adapters.Exceptions.CustomerNotFoundException;
 import com.semicolon.africa.domain.Customer;
+import com.semicolon.africa.domain.Review;
 import com.semicolon.africa.domain.constants.LoginStatus;
 import com.semicolon.africa.ports.in.CustomerService;
+import com.semicolon.africa.ports.in.dtos.request.CreateReviewRequest;
 import com.semicolon.africa.ports.in.dtos.request.LoginCustomerRequest;
 import com.semicolon.africa.ports.in.dtos.request.LogoutCustomerRequest;
 import com.semicolon.africa.ports.in.dtos.request.RegisterCustomerRequest;
 import com.semicolon.africa.ports.out.CustomerRepository;
-import com.semicolon.africa.ports.out.dtos.response.CustomerLoginResponse;
-import com.semicolon.africa.ports.out.dtos.response.CustomerLogoutResponse;
-import com.semicolon.africa.ports.out.dtos.response.CustomerRegisterResponse;
-import com.semicolon.africa.ports.out.dtos.response.RegisterCustomerResponse;
+import com.semicolon.africa.ports.out.ReviewRepository;
+import com.semicolon.africa.ports.out.dtos.response.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -23,6 +25,8 @@ public class CustomerServiceImpl implements CustomerService {
     private ModelMapper modelMapper;
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @Override
     public RegisterCustomerResponse registerCustomer(RegisterCustomerRequest customerRequest) {
@@ -79,14 +83,25 @@ public class CustomerServiceImpl implements CustomerService {
 //    public void findTechnicianByLocation(LocationFindTechnicianRequest customerRequest) {
 //
 //    }
-//
+
+    @Override
+    public CreateReviewResponse createReview(CreateReviewRequest customerRequest) {
+        Review review = new Review();
+        review.setReviewId(customerRequest.getReviewId());
+        review.setReviewDate(LocalDate.now());
+        review.setDesc(customerRequest.getMessage());
+        review.setTechnicianId(customerRequest.getCustomerId());
+        review.setCustomerId(customerRequest.getCustomerId());
+        review.setReviewCount(customerRequest.getReviewCount());
+        reviewRepository.save(review);
+        CreateReviewResponse response = new CreateReviewResponse();
+        response.setMessage("Review Created Successfully");
+        return response;
+    }
+
+
 //    @Override
-//    public void createReview(createReviewRequest customerRequest) {
-//
-//    }
-//
-//    @Override
-//    public void updateReview(updatetReviewRequest customerRequest) {
+//    public void updateReview(UpdateReviewRequest customerRequest) {
 //
 //    }
 }
