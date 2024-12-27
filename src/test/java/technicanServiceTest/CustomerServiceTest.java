@@ -1,13 +1,12 @@
 package technicanServiceTest;
 
 import com.semicolon.africa.Main;
-import com.semicolon.africa.domain.Review;
 import com.semicolon.africa.ports.in.CustomerService;
-import com.semicolon.africa.ports.in.dtos.request.CustomerRegisterRequest;
+import com.semicolon.africa.ports.in.dtos.request.CreateReviewRequest;
 import com.semicolon.africa.ports.in.dtos.request.LoginCustomerRequest;
 import com.semicolon.africa.ports.in.dtos.request.RegisterCustomerRequest;
+import com.semicolon.africa.ports.out.dtos.response.CreateReviewResponse;
 import com.semicolon.africa.ports.out.dtos.response.CustomerLoginResponse;
-import com.semicolon.africa.ports.out.dtos.response.CustomerRegisterResponse;
 import com.semicolon.africa.ports.out.dtos.response.RegisterCustomerResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,18 +56,20 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void testThatCustomerCanMakeReview(){
-
+    public void  testThatCustomerCanMakeReview(){
+        CreateReviewRequest request = createCustomerReview();
+        CreateReviewResponse response = customerService.createReview(request);
+        assertNotNull(response);
     }
 
-    private Review createCustomerReview(){
-        Review review = new Review();
-        review.setReviewId(1L);
-        review.setReviewCount(3);
-        review.setDesc("A very nice technican\nHe really helped fix my solar and he did it perfectly");
-        review.setReviewDate(LocalDate.now());
-        review.setTechnicianId(1L);
-        review.setCustomerId(1L);
-        return review;
+    private CreateReviewRequest createCustomerReview(){
+        CreateReviewRequest reviewRequest = new CreateReviewRequest();
+        reviewRequest.setReviewId(1L);
+        reviewRequest.setReviewCount(3);
+        reviewRequest.setDesc("A very nice technican\nHe really helped fix my solar and he did it perfectly");
+        reviewRequest.setReviewDate(LocalDate.now());
+        reviewRequest.setTechnicianId(1L);
+        reviewRequest.setCustomerId(1L);
+        return reviewRequest;
     }
 }

@@ -89,10 +89,11 @@ public class CustomerServiceImpl implements CustomerService {
         Review review = new Review();
         review.setReviewId(customerRequest.getReviewId());
         review.setReviewDate(LocalDate.now());
-        review.setDesc(customerRequest.getMessage());
+        review.setDesc(customerRequest.getDesc());
         review.setTechnicianId(customerRequest.getCustomerId());
         review.setCustomerId(customerRequest.getCustomerId());
         review.setReviewCount(customerRequest.getReviewCount());
+        System.out.println(review);
         reviewRepository.save(review);
         CreateReviewResponse response = new CreateReviewResponse();
         response.setMessage("Review Created Successfully");
