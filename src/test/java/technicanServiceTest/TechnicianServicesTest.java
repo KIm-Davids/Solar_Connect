@@ -2,11 +2,20 @@ package technicanServiceTest;
 
 import com.semicolon.africa.Main;
 import com.semicolon.africa.adapters.TechnicianServiceImpl;
+import com.semicolon.africa.adapters.validations.Validations;
 import com.semicolon.africa.domain.constants.Availability;
 import com.semicolon.africa.domain.constants.SubscriptionStatus;
 import com.semicolon.africa.domain.constants.SubscriptionType;
 import com.semicolon.africa.ports.in.dtos.request.*;
+import com.semicolon.africa.ports.in.dtos.request.technician.AvailabilityStatusRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.LoginTechnicianRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.LogoutTechnicianRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.RegisterTechnicianRequest;
 import com.semicolon.africa.ports.out.dtos.response.*;
+import com.semicolon.africa.ports.out.dtos.response.technician.AvailabilityStatusResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.LoginTechnicianResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.LogoutTechnicianResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.RegisterTechnicianResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @SpringBootTest(classes = Main.class)
@@ -21,6 +31,14 @@ public class TechnicianServicesTest {
 
     @Autowired
     private TechnicianServiceImpl service;
+
+    @Test
+    public void testTechnicianEmailIsCorrect(){
+        RegisterTechnicianRequest technician = registerTechnician();
+        Validations validateEmail = new Validations();
+        boolean assertions = validateEmail.validateEmail(technician.getEmail());
+        assertTrue(assertions);
+    }
 
     @Test
     public void testThatTechnicianCanRegister(){

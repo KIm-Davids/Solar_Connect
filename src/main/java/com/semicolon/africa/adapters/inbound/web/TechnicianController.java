@@ -2,8 +2,15 @@ package com.semicolon.africa.adapters.inbound.web;
 
 import com.semicolon.africa.adapters.TechnicianServiceImpl;
 import com.semicolon.africa.ports.in.dtos.request.*;
+import com.semicolon.africa.ports.in.dtos.request.technician.AvailabilityStatusRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.LoginTechnicianRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.LogoutTechnicianRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.RegisterTechnicianRequest;
 import com.semicolon.africa.ports.out.dtos.response.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.semicolon.africa.ports.out.dtos.response.technician.AvailabilityStatusResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.LoginTechnicianResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.LogoutTechnicianResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.RegisterTechnicianResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,12 +61,27 @@ public class TechnicianController {
             AvailabilityStatusResponse response = technicianService.changeAvailability(request);
             return new ResponseEntity<>(new ApiResponse(true, response), OK);
         }catch(Exception exception){
-            return new ResponseEntity<>(new ApiResponse(false, exception.getMessage()), BAD_GATEWAY);
+            return new ResponseEntity<>(new ApiResponse(false, exception.getMessage()), INTERNAL_SERVER_ERROR);
         }
     }
 
-//    @PostMapping("/subscribe_technician")
-//    public ResponseEntity<?> subscribeTechnician(@RequestBody SubscriptionRequest request){
-//
-//    }
+    @PostMapping("/subscribe_technician")
+    public ResponseEntity<?> subscribeTechnician(@RequestBody SubscriptionRequest request){
+        try{
+            SubscriptionResponse response = technicianService.subscribe(request);
+            return new ResponseEntity<>(new ApiResponse(true, response), OK);
+        }catch(Exception exception){
+            return new ResponseEntity<>(new ApiResponse(false, exception.getMessage()), INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PatchMapping
+    public ResponseEntity<?> unsubscribeTechnician(@RequestBody UpdateSubscriptionRequest request) {
+        try {
+            SubscriptionResponse response = technicianService.updateSubscription(request);
+            return new ResponseEntity<>(new ApiResponse(true, response), OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(new ApiResponse(false, exception.getMessage()), INTERNAL_SERVER_ERROR);
+        }
+    }
 }

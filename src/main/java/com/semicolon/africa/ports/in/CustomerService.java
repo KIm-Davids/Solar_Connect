@@ -1,10 +1,13 @@
 package com.semicolon.africa.ports.in;
 
 import com.semicolon.africa.ports.in.dtos.request.CreateReviewRequest;
-import com.semicolon.africa.ports.in.dtos.request.LoginCustomerRequest;
-import com.semicolon.africa.ports.in.dtos.request.LogoutCustomerRequest;
-import com.semicolon.africa.ports.in.dtos.request.RegisterCustomerRequest;
+import com.semicolon.africa.ports.in.dtos.request.customer.LoginCustomerRequest;
+import com.semicolon.africa.ports.in.dtos.request.customer.LogoutCustomerRequest;
+import com.semicolon.africa.ports.in.dtos.request.customer.RegisterCustomerRequest;
 import com.semicolon.africa.ports.out.dtos.response.*;
+import com.semicolon.africa.ports.out.dtos.response.customer.CustomerLoginResponse;
+import com.semicolon.africa.ports.out.dtos.response.customer.CustomerLogoutResponse;
+import com.semicolon.africa.ports.out.dtos.response.customer.RegisterCustomerResponse;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,4 +1,4 @@
-package com.semicolon.africa.ports.in.dtos.request;
+package com.semicolon.africa.ports.in.dtos.request.technician;
 
 
 import com.semicolon.africa.domain.constants.LoginStatus;

@@ -2,7 +2,15 @@ package com.semicolon.africa.ports.in;
 
 
 import com.semicolon.africa.ports.in.dtos.request.*;
+import com.semicolon.africa.ports.in.dtos.request.technician.AvailabilityStatusRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.LoginTechnicianRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.LogoutTechnicianRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.RegisterTechnicianRequest;
 import com.semicolon.africa.ports.out.dtos.response.*;
+import com.semicolon.africa.ports.out.dtos.response.technician.AvailabilityStatusResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.LoginTechnicianResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.LogoutTechnicianResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.RegisterTechnicianResponse;
 import org.springframework.stereotype.Service;
 
 @Service

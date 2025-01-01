@@ -1,17 +1,22 @@
 package com.semicolon.africa.adapters;
 
 import com.semicolon.africa.adapters.Exceptions.CustomerNotFoundException;
+import com.semicolon.africa.adapters.Exceptions.InvalidDetailException;
+import com.semicolon.africa.adapters.validations.Validations;
 import com.semicolon.africa.domain.Customer;
 import com.semicolon.africa.domain.Review;
 import com.semicolon.africa.domain.constants.LoginStatus;
 import com.semicolon.africa.ports.in.CustomerService;
 import com.semicolon.africa.ports.in.dtos.request.CreateReviewRequest;
-import com.semicolon.africa.ports.in.dtos.request.LoginCustomerRequest;
-import com.semicolon.africa.ports.in.dtos.request.LogoutCustomerRequest;
-import com.semicolon.africa.ports.in.dtos.request.RegisterCustomerRequest;
+import com.semicolon.africa.ports.in.dtos.request.customer.LoginCustomerRequest;
+import com.semicolon.africa.ports.in.dtos.request.customer.LogoutCustomerRequest;
+import com.semicolon.africa.ports.in.dtos.request.customer.RegisterCustomerRequest;
 import com.semicolon.africa.ports.out.CustomerRepository;
 import com.semicolon.africa.ports.out.ReviewRepository;
 import com.semicolon.africa.ports.out.dtos.response.*;
+import com.semicolon.africa.ports.out.dtos.response.customer.CustomerLoginResponse;
+import com.semicolon.africa.ports.out.dtos.response.customer.CustomerLogoutResponse;
+import com.semicolon.africa.ports.out.dtos.response.customer.RegisterCustomerResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +36,13 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public RegisterCustomerResponse registerCustomer(RegisterCustomerRequest customerRequest) {
         Customer customer = new Customer();
+        Validations validation = new Validations();
         customer.setCustomerId(customer.getCustomerId());
-        customer.setEmail(customerRequest.getEmail());
+        if(validation.validateEmail(customerRequest.getEmail())) {
+            customer.setEmail(customerRequest.getEmail());
+        }else{
+            throw new InvalidDetailException("Invalid Details");
+        }
         customer.setFirstName(customerRequest.getFirstName());
         customer.setLastName(customerRequest.getLastName());
         customer.setPhoneNumber(customerRequest.getPhoneNumber());
@@ -93,7 +103,6 @@ public class CustomerServiceImpl implements CustomerService {
         review.setTechnicianId(customerRequest.getCustomerId());
         review.setCustomerId(customerRequest.getCustomerId());
         review.setReviewCount(customerRequest.getReviewCount());
-//        System.out.println(review);
         reviewRepository.save(review);
         CreateReviewResponse response = new CreateReviewResponse();
         response.setMessage("Review Created Successfully");

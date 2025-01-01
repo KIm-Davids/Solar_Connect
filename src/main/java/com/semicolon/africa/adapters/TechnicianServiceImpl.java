@@ -1,8 +1,10 @@
 package com.semicolon.africa.adapters;
 
 import com.semicolon.africa.adapters.Exceptions.CannotFIndTechnicianException;
+import com.semicolon.africa.adapters.Exceptions.InvalidDetailException;
 import com.semicolon.africa.adapters.Exceptions.SubscriptionDoesNotExistException;
 import com.semicolon.africa.adapters.Exceptions.TechnicianNotPaidException;
+import com.semicolon.africa.adapters.validations.Validations;
 import com.semicolon.africa.domain.Subscription;
 import com.semicolon.africa.domain.Technician;
 import com.semicolon.africa.domain.constants.Availability;
@@ -11,9 +13,17 @@ import com.semicolon.africa.domain.constants.SubscriptionStatus;
 import com.semicolon.africa.domain.constants.UserType;
 import com.semicolon.africa.ports.in.TechnicianServiceInterface;
 import com.semicolon.africa.ports.in.dtos.request.*;
+import com.semicolon.africa.ports.in.dtos.request.technician.AvailabilityStatusRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.LoginTechnicianRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.LogoutTechnicianRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.RegisterTechnicianRequest;
 import com.semicolon.africa.ports.out.SubscriptionRepository;
 import com.semicolon.africa.ports.out.TechnicianRepositoryInterface;
 import com.semicolon.africa.ports.out.dtos.response.*;
+import com.semicolon.africa.ports.out.dtos.response.technician.AvailabilityStatusResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.LoginTechnicianResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.LogoutTechnicianResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.RegisterTechnicianResponse;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +46,21 @@ public class TechnicianServiceImpl implements TechnicianServiceInterface {
     @Override
     public RegisterTechnicianResponse registerTechnician(RegisterTechnicianRequest request) {
         Technician technician = new Technician();
+        Validations validations = new Validations();
+
         technician.setFirstName(request.getFirstName());
         technician.setLastName(request.getLastName());
-        technician.setEmail(request.getEmail());
+        if(validations.validateEmail(request.getEmail())) {
+            technician.setEmail(request.getEmail());
+        }else{
+            throw new InvalidDetailException("Invalid Details");
+        }
         technician.setPassword(request.getPassword());
-        technician.setPhoneNumber(request.getPhoneNumber());
+        if(validations.validatePhoneNumber(request.getPhoneNumber())) {
+            technician.setPhoneNumber(request.getPhoneNumber());
+        }else{
+            throw new InvalidDetailException("Invalid Details");
+        }
         technician.setNin(request.getNin());
         technician.setLocation(request.getLocation());
         technician.setUserType(UserType.valueOf(UserType.TECHNICIAN.toString()));
@@ -84,7 +104,7 @@ public class TechnicianServiceImpl implements TechnicianServiceInterface {
             technicianRepository.save(technician);
         }
         AvailabilityStatusResponse response = new AvailabilityStatusResponse();
-        response.setMessage("Logged out Successfully !!!");
+        response.setMessage("Changed Availability status successfully");
         return response;
     }
 

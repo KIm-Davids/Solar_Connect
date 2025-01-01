@@ -1,12 +1,9 @@
-package com.semicolon.africa.ports.in.dtos.request;
+package com.semicolon.africa.ports.in.dtos.request.technician;
 
 import com.semicolon.africa.domain.User;
 import com.semicolon.africa.domain.constants.SubscriptionStatus;
 import com.semicolon.africa.domain.constants.SubscriptionType;
 import com.semicolon.africa.domain.constants.UserType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 

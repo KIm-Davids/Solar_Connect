@@ -1,4 +1,4 @@
-package com.semicolon.africa.ports.in.dtos.request;
+package com.semicolon.africa.ports.in.dtos.request.customer;
 
 import com.semicolon.africa.domain.User;
 import lombok.Getter;
