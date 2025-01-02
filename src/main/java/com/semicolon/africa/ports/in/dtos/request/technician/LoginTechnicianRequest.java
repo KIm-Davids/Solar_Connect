@@ -10,5 +10,7 @@ public class LoginTechnicianRequest {
 
     @Id
     private Long technicianId;
+    private String customerEmail;
+    private String password;
 
 }

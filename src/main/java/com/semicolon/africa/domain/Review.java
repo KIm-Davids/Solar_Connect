@@ -1,9 +1,6 @@
 package com.semicolon.africa.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,10 +16,12 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long reviewId;
     private int reviewCount;
-    private String desc;
+    private String description;
     private double rating;
     private LocalDate reviewDate;
     private long customerId;
-    private long technicianId;
+    @ManyToOne
+    @JoinColumn(name = "technician_id")
+    private Technician technician;
 
 }

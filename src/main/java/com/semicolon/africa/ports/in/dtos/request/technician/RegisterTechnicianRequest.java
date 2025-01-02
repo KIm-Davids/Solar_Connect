@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 public class RegisterTechnicianRequest extends User {
 
+    private long id;
     private SubscriptionStatus subscriptionStatus;
     private UserType userType;
     private SubscriptionType subscriptionType;

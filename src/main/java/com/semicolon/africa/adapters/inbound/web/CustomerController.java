@@ -22,7 +22,7 @@ public class CustomerController {
     @Autowired
     private CustomerServiceImpl customerService;
 
-    @PostMapping
+    @PostMapping("/register-customer")
     public ResponseEntity<?> registerCustomer(@RequestBody RegisterCustomerRequest request){
         try {
             RegisterCustomerResponse response = customerService.registerCustomer(request);
@@ -32,7 +32,7 @@ public class CustomerController {
         }
     }
 
-    @PatchMapping
+    @PatchMapping("login-customer")
     public ResponseEntity<?> loginCustomer(@RequestBody LoginCustomerRequest request){
         try{
             CustomerLoginResponse response = customerService.loginCustomer(request);
@@ -42,7 +42,7 @@ public class CustomerController {
         }
     }
 
-    @PatchMapping
+    @PatchMapping("logout-customer")
     public ResponseEntity<?> logoutCustomer(@RequestBody LogoutCustomerRequest request){
         try{
             CustomerLogoutResponse response = customerService.logoutCustomer(request);
@@ -51,4 +51,6 @@ public class CustomerController {
             return new ResponseEntity<>(new ApiResponse(false, exception.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
+
+
 }

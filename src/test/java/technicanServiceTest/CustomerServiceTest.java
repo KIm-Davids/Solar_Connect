@@ -52,6 +52,8 @@ public class CustomerServiceTest {
     private LoginCustomerRequest customerLoginRequest(){
         LoginCustomerRequest request = new LoginCustomerRequest();
         request.setCustomerId(1L);
+        request.setCustomerEmail("gmail@email.com");
+        request.setPassword("michael");
         return request;
     }
 
@@ -64,9 +66,8 @@ public class CustomerServiceTest {
 
     private CreateReviewRequest createCustomerReview(){
         CreateReviewRequest reviewRequest = new CreateReviewRequest();
-        reviewRequest.setReviewId(1L);
-        reviewRequest.setReviewCount(3);
-        reviewRequest.setDesc("A very nice technican\nHe really helped fix my solar and he did it perfectly");
+        reviewRequest.setRating(3);
+        reviewRequest.setDescription("A very nice technician He really helped fix my solar and he did it perfectly");
         reviewRequest.setReviewDate(LocalDate.now());
         reviewRequest.setTechnicianId(1L);
         reviewRequest.setCustomerId(1L);

@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -19,11 +21,12 @@ public class Technician extends User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long technicianId;
     @Enumerated(EnumType.STRING)
-    private SubscriptionStatus subscriptionStatus;
-    @Enumerated(EnumType.STRING)
     private UserType userType;
     @Enumerated(EnumType.STRING)
-    private SubscriptionType subscriptionType;
-    @Enumerated(EnumType.STRING)
     private Availability isAvailable;
+    @OneToMany(mappedBy = "technician")
+    private List<Review> review;
+//    @OneToOne
+//    @JoinColumn(name = "subscription_id")
+//    private Subscription subscription;
 }

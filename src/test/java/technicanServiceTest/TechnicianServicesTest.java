@@ -49,6 +49,7 @@ public class TechnicianServicesTest {
 
     private RegisterTechnicianRequest registerTechnician(){
         RegisterTechnicianRequest request = new RegisterTechnicianRequest();
+//        request.setId(1L);
         request.setFirstName("paul");
         request.setLastName("Oscar");
         request.setEmail("email@gmail.com");
@@ -69,6 +70,8 @@ public class TechnicianServicesTest {
     private LoginTechnicianRequest loginTechnician(){
         LoginTechnicianRequest request = new LoginTechnicianRequest();
         request.setTechnicianId(1L);
+        request.setCustomerEmail("email@gmail.com");
+        request.setPassword("1234");
         return request;
     }
 

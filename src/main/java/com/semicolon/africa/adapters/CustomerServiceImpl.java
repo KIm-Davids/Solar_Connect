@@ -1,10 +1,12 @@
 package com.semicolon.africa.adapters;
 
 import com.semicolon.africa.adapters.Exceptions.CustomerNotFoundException;
+import com.semicolon.africa.adapters.Exceptions.CustomerNotLoggedInException;
 import com.semicolon.africa.adapters.Exceptions.InvalidDetailException;
 import com.semicolon.africa.adapters.validations.Validations;
 import com.semicolon.africa.domain.Customer;
 import com.semicolon.africa.domain.Review;
+import com.semicolon.africa.domain.Technician;
 import com.semicolon.africa.domain.constants.LoginStatus;
 import com.semicolon.africa.ports.in.CustomerService;
 import com.semicolon.africa.ports.in.dtos.request.CreateReviewRequest;
@@ -13,6 +15,7 @@ import com.semicolon.africa.ports.in.dtos.request.customer.LogoutCustomerRequest
 import com.semicolon.africa.ports.in.dtos.request.customer.RegisterCustomerRequest;
 import com.semicolon.africa.ports.out.CustomerRepository;
 import com.semicolon.africa.ports.out.ReviewRepository;
+import com.semicolon.africa.ports.out.TechnicianRepositoryInterface;
 import com.semicolon.africa.ports.out.dtos.response.*;
 import com.semicolon.africa.ports.out.dtos.response.customer.CustomerLoginResponse;
 import com.semicolon.africa.ports.out.dtos.response.customer.CustomerLogoutResponse;
@@ -22,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -32,6 +36,8 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private TechnicianRepositoryInterface technicianRepositoryInterface;
 
     @Override
     public RegisterCustomerResponse registerCustomer(RegisterCustomerRequest customerRequest) {
@@ -60,13 +66,16 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerLoginResponse loginCustomer(LoginCustomerRequest customerRequest) {
         Customer customer = customerRepository.findCustomerByCustomerId(customerRequest.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException("Customer not found\nPlease try again !!!"));
-        if (customer.getIsLoggedIn() == LoginStatus.OFFLINE) {
-            customer.setIsLoggedIn(LoginStatus.valueOf(LoginStatus.ONLINE.toString()));
-            customerRepository.save(customer);
-            CustomerLoginResponse response = new CustomerLoginResponse();
-            response.setMessage("Customer Logged In Successfully !!!");
-            return response;
+        if(customerRequest.getCustomerEmail().equals(customer.getEmail()) && customerRequest.getPassword().equals(customer.getPassword())){
+            if (customer.getIsLoggedIn() == LoginStatus.OFFLINE) {
+                customer.setIsLoggedIn(LoginStatus.valueOf(LoginStatus.ONLINE.toString()));
+                customerRepository.save(customer);
+                CustomerLoginResponse response = new CustomerLoginResponse();
+                response.setMessage("Customer Logged In Successfully !!!");
+                return response;
+            }
         }
+
         throw new CustomerNotFoundException("Invalid Entry\nPlease try again !!!");
     }
 
@@ -96,17 +105,23 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CreateReviewResponse createReview(CreateReviewRequest customerRequest) {
-        Review review = new Review();
-        review.setReviewId(customerRequest.getReviewId());
-        review.setReviewDate(LocalDate.now());
-        review.setDesc(customerRequest.getDesc());
-        review.setTechnicianId(customerRequest.getCustomerId());
-        review.setCustomerId(customerRequest.getCustomerId());
-        review.setReviewCount(customerRequest.getReviewCount());
-        reviewRepository.save(review);
-        CreateReviewResponse response = new CreateReviewResponse();
-        response.setMessage("Review Created Successfully");
-        return response;
+        Customer customer = customerRepository.findCustomerByCustomerId(customerRequest.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException("Customer not found\nPlease try again !!!"));
+        if(customer.getIsLoggedIn().equals(LoginStatus.ONLINE)) {
+            Review review = new Review();
+            Technician technician = new Technician();
+            technician.setTechnicianId(customerRequest.getTechnicianId());
+            review.setReviewDate(LocalDate.now());
+            review.setDescription(customerRequest.getDescription());
+            review.setTechnician(technician);
+            review.setCustomerId(customerRequest.getCustomerId());
+            review.setRating(customerRequest.getRating());
+            reviewRepository.save(review);
+            CreateReviewResponse response = new CreateReviewResponse();
+            response.setMessage("Review Created Successfully");
+            return response;
+        }
+        throw new CustomerNotLoggedInException("Customer Not Logged In");
+
     }
 
 

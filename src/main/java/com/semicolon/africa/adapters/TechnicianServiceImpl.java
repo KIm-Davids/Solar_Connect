@@ -1,9 +1,6 @@
 package com.semicolon.africa.adapters;
 
-import com.semicolon.africa.adapters.Exceptions.CannotFIndTechnicianException;
-import com.semicolon.africa.adapters.Exceptions.InvalidDetailException;
-import com.semicolon.africa.adapters.Exceptions.SubscriptionDoesNotExistException;
-import com.semicolon.africa.adapters.Exceptions.TechnicianNotPaidException;
+import com.semicolon.africa.adapters.Exceptions.*;
 import com.semicolon.africa.adapters.validations.Validations;
 import com.semicolon.africa.domain.Subscription;
 import com.semicolon.africa.domain.Technician;
@@ -37,8 +34,6 @@ import java.time.LocalDate;
 public class TechnicianServiceImpl implements TechnicianServiceInterface {
 
     @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
     private TechnicianRepositoryInterface technicianRepository;
     @Autowired
     private SubscriptionRepository subscriptionRepository;
@@ -48,6 +43,7 @@ public class TechnicianServiceImpl implements TechnicianServiceInterface {
         Technician technician = new Technician();
         Validations validations = new Validations();
 
+//        technician.setTechnicianId(request.getId());
         technician.setFirstName(request.getFirstName());
         technician.setLastName(request.getLastName());
         if(validations.validateEmail(request.getEmail())) {
@@ -96,12 +92,16 @@ public class TechnicianServiceImpl implements TechnicianServiceInterface {
     @Override
     public AvailabilityStatusResponse changeAvailability(AvailabilityStatusRequest availabilityStatus) {
         Technician technician = technicianRepository.findByTechnicianId(availabilityStatus.getTechnicianId()).orElseThrow(() -> new CannotFIndTechnicianException("Technician Not Found !!!"));
-        if(availabilityStatus.getIsAvailable().toString().equalsIgnoreCase(Availability.AVAILABLE.toString())) {
-            technician.setIsAvailable(Availability.valueOf(Availability.AVAILABLE.toString()));
-            technicianRepository.save(technician);
-        }else {
-            technician.setIsAvailable(Availability.valueOf(Availability.NOT_AVAILABLE.toString()));
-            technicianRepository.save(technician);
+        if(technician.getIsLoggedIn().equals(LoginStatus.ONLINE)) {
+            if (availabilityStatus.getIsAvailable().toString().equalsIgnoreCase(Availability.AVAILABLE.toString())) {
+                technician.setIsAvailable(Availability.valueOf(Availability.AVAILABLE.toString()));
+                technicianRepository.save(technician);
+            } else {
+                technician.setIsAvailable(Availability.valueOf(Availability.NOT_AVAILABLE.toString()));
+                technicianRepository.save(technician);
+            }
+        }else{
+            throw new UserNotLoggedInException("Please Ensure you're Logged In !!!");
         }
         AvailabilityStatusResponse response = new AvailabilityStatusResponse();
         response.setMessage("Changed Availability status successfully");
@@ -111,17 +111,24 @@ public class TechnicianServiceImpl implements TechnicianServiceInterface {
     @Override
     public SubscriptionResponse subscribe(SubscriptionRequest technicianSubscriptionRequest) {
         SubscriptionResponse response = new SubscriptionResponse();
-        if(technicianSubscriptionRequest.isPaid()){
-            Subscription subscription = new Subscription();
-            subscription.setTechnicianId(technicianSubscriptionRequest.getTechnicianId());
-            subscription.setStartDate(technicianSubscriptionRequest.getStartDate());
-            subscription.setEndDate(technicianSubscriptionRequest.getEndDate());
-            subscription.setSubscriptionStatus(technicianSubscriptionRequest.getSubscriptionStatus());
-            subscription.setSubscriptionType(technicianSubscriptionRequest.getSubscriptionType());
-            subscriptionRepository.save(subscription);
-            response.setMessage("User Subscribed Successfully !!!");
-            return response;
-        }
+        Technician technician = technicianRepository.findByTechnicianId(technicianSubscriptionRequest.getTechnicianId()).orElseThrow(() -> new CannotFIndTechnicianException("Technician Not Found !!!"));
+
+            if (technician.getIsLoggedIn().equals(LoginStatus.ONLINE)) {
+                if(technicianSubscriptionRequest.isPaid()) {
+                Subscription subscription = new Subscription();
+                subscription.setTechnicianId(technicianSubscriptionRequest.getTechnicianId());
+                subscription.setStartDate(technicianSubscriptionRequest.getStartDate());
+                subscription.setEndDate(technicianSubscriptionRequest.getEndDate());
+                subscription.setSubscriptionStatus(technicianSubscriptionRequest.getSubscriptionStatus());
+                subscription.setSubscriptionType(technicianSubscriptionRequest.getSubscriptionType());
+                subscriptionRepository.save(subscription);
+                response.setMessage("User Subscribed Successfully !!!");
+                return response;
+            }
+        }else{
+                throw new UserNotLoggedInException("User not logged in");
+            }
+
 
         Subscription subscription = subscriptionRepository.findSubscriptionByTechnicianId(technicianSubscriptionRequest.getTechnicianId()).orElseThrow(() -> new SubscriptionDoesNotExistException("Please ensure you have subscribed !!!"));
         if(subscription.getEndDate().equals(LocalDate.now())){
@@ -136,7 +143,7 @@ public class TechnicianServiceImpl implements TechnicianServiceInterface {
     public SubscriptionResponse updateSubscription(UpdateSubscriptionRequest request){
         Subscription subscription = subscriptionRepository.findSubscriptionByTechnicianId(request.getTechnicianId()).orElseThrow(() ->  new SubscriptionDoesNotExistException("Please ensure you have subscribed !!!"));
         SubscriptionResponse response = new SubscriptionResponse();
-        if(subscription.getSubscriptionStatus().equals(SubscriptionStatus.PREMIUM) && request.isPaid()){
+            if(subscription.getSubscriptionStatus().equals(SubscriptionStatus.PREMIUM) && request.isPaid()){
             Subscription updatedSubscription = new Subscription();
             updatedSubscription.setTechnicianId(subscription.getTechnicianId());
             updatedSubscription.setSubscriptionType(subscription.getSubscriptionType());
