@@ -25,7 +25,7 @@ public class TechnicianController {
         this.technicianService = technicianService;
     }
 
-    @PostMapping("/register_technician")
+    @PostMapping("/register-technician")
     public ResponseEntity<?> registerTechnician(@RequestBody RegisterTechnicianRequest request){
         try{
             RegisterTechnicianResponse response = technicianService.registerTechnician(request);
@@ -35,7 +35,7 @@ public class TechnicianController {
         }
     }
 
-    @PatchMapping("/login_technician")
+    @PatchMapping("/login-technician")
     public ResponseEntity<?> loginTechnician(@RequestBody LoginTechnicianRequest request){
         try{
             LoginTechnicianResponse response = technicianService.loginTechnician(request);
@@ -45,7 +45,7 @@ public class TechnicianController {
         }
     }
 
-    @PatchMapping("/logout_technician")
+    @PatchMapping("/logout-technician")
     public ResponseEntity<?> logoutTechnician(@RequestBody LogoutTechnicianRequest request){
         try{
             LogoutTechnicianResponse response = technicianService.logoutTechnician(request);
@@ -55,7 +55,7 @@ public class TechnicianController {
         }
     }
 
-    @PutMapping("/change_availability")
+    @PutMapping("/change-availability")
     public ResponseEntity<?> changeTechnicianAvailability(@RequestBody AvailabilityStatusRequest request){
         try{
             AvailabilityStatusResponse response = technicianService.changeAvailability(request);
@@ -65,7 +65,7 @@ public class TechnicianController {
         }
     }
 
-    @PostMapping("/subscribe_technician")
+    @PostMapping("/subscribe-technician")
     public ResponseEntity<?> subscribeTechnician(@RequestBody SubscriptionRequest request){
         try{
             SubscriptionResponse response = technicianService.subscribe(request);
@@ -75,8 +75,8 @@ public class TechnicianController {
         }
     }
 
-    @PatchMapping
-    public ResponseEntity<?> unsubscribeTechnician(@RequestBody UpdateSubscriptionRequest request) {
+    @PatchMapping("/update-technician-sub")
+    public ResponseEntity<?> updateTechnicianSubscription(@RequestBody UpdateSubscriptionRequest request) {
         try {
             SubscriptionResponse response = technicianService.updateSubscription(request);
             return new ResponseEntity<>(new ApiResponse(true, response), OK);

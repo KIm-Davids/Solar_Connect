@@ -50,10 +50,10 @@ public class TechnicianServicesTest {
     private RegisterTechnicianRequest registerTechnician(){
         RegisterTechnicianRequest request = new RegisterTechnicianRequest();
 //        request.setId(1L);
-        request.setFirstName("paul");
-        request.setLastName("Oscar");
-        request.setEmail("email@gmail.com");
-        request.setPhoneNumber("08023291202");
+        request.setFirstName("tammy");
+        request.setLastName("Abraham");
+        request.setEmail("tammy@gmail.com");
+        request.setPhoneNumber("09114142376");
         request.setPassword("1234");
         request.setNin("12345");
         request.setLocation("312 Hebert Macauley way, yaba ");
@@ -69,8 +69,8 @@ public class TechnicianServicesTest {
 
     private LoginTechnicianRequest loginTechnician(){
         LoginTechnicianRequest request = new LoginTechnicianRequest();
-        request.setTechnicianId(1L);
-        request.setCustomerEmail("email@gmail.com");
+        request.setTechnicianId(7L);
+        request.setCustomerEmail("tammy@gmail.com");
         request.setPassword("1234");
         return request;
     }
@@ -97,7 +97,7 @@ public class TechnicianServicesTest {
 
     private AvailabilityStatusRequest availabilityStatusRequest(){
         AvailabilityStatusRequest request = new AvailabilityStatusRequest();
-        request.setTechnicianId(1L);
+        request.setTechnicianId(7L);
         request.setIsAvailable(Availability.AVAILABLE);
         return request;
     }

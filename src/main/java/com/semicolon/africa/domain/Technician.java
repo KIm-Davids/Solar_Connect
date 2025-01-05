@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@ToString
+//@ToString
 public class Technician extends User {
 
     @Id

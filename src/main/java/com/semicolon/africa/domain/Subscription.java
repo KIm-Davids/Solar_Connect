@@ -24,4 +24,12 @@ public class Subscription {
     @Enumerated(EnumType.STRING)
     private SubscriptionStatus subscriptionStatus;
 
+    private void setSubscriptionId(long id){
+        this.subscriptionId = id;
+    }
+
+    private long getSubscriptionId(){
+        return subscriptionId;
+    }
+
 }

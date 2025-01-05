@@ -1,13 +1,17 @@
 package technicanServiceTest;
 
 import com.semicolon.africa.Main;
+import com.semicolon.africa.domain.constants.Availability;
+import com.semicolon.africa.domain.constants.LoginStatus;
 import com.semicolon.africa.ports.in.CustomerService;
 import com.semicolon.africa.ports.in.dtos.request.CreateReviewRequest;
+import com.semicolon.africa.ports.in.dtos.request.customer.FindTechnicianByAvailabilityRequest;
 import com.semicolon.africa.ports.in.dtos.request.customer.LoginCustomerRequest;
 import com.semicolon.africa.ports.in.dtos.request.customer.RegisterCustomerRequest;
 import com.semicolon.africa.ports.out.dtos.response.CreateReviewResponse;
 import com.semicolon.africa.ports.out.dtos.response.customer.CustomerLoginResponse;
 import com.semicolon.africa.ports.out.dtos.response.customer.RegisterCustomerResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.FindTechnicianByAvailabilityResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -72,5 +76,16 @@ public class CustomerServiceTest {
         reviewRequest.setTechnicianId(1L);
         reviewRequest.setCustomerId(1L);
         return reviewRequest;
+    }
+
+    @Test
+    public void testThatCustomerCanFindTechnician(){
+        FindTechnicianByAvailabilityRequest request = new FindTechnicianByAvailabilityRequest();
+        request.setAvailability(Availability.AVAILABLE);
+        request.setLoginStatus(LoginStatus.ONLINE);
+
+        FindTechnicianByAvailabilityResponse response = customerService.findTechnicianByAvailability(request);
+        System.out.println(response.getTechnicianList());
+        assertNotNull(response);
     }
 }

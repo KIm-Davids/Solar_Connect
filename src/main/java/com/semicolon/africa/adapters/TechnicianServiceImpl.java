@@ -83,6 +83,7 @@ public class TechnicianServiceImpl implements TechnicianServiceInterface {
     public LogoutTechnicianResponse logoutTechnician(LogoutTechnicianRequest logoutTechnician) {
         Technician technician = technicianRepository.findByTechnicianId(logoutTechnician.getTechnicianId()).orElseThrow(() -> new CannotFIndTechnicianException("Technician Not Found !!!"));
         technician.setIsLoggedIn(LoginStatus.valueOf(LoginStatus.OFFLINE.toString()));
+        technician.setIsAvailable(Availability.NOT_AVAILABLE);
         technicianRepository.save(technician);
         LogoutTechnicianResponse response = new LogoutTechnicianResponse();
         response.setMessage("Logged out Successfully !!!");
@@ -147,7 +148,7 @@ public class TechnicianServiceImpl implements TechnicianServiceInterface {
             Subscription updatedSubscription = new Subscription();
             updatedSubscription.setTechnicianId(subscription.getTechnicianId());
             updatedSubscription.setSubscriptionType(subscription.getSubscriptionType());
-            updatedSubscription.setSubscriptionId(subscription.getSubscriptionId());
+//            updatedSubscription.setSubscriptionId(subscription.getSubscriptionId());
             updatedSubscription.setStartDate(LocalDate.now());
             updatedSubscription.setEndDate(subscription.getEndDate().plusDays(30));
             updatedSubscription.setSubscriptionStatus(subscription.getSubscriptionStatus());

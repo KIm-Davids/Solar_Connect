@@ -1,9 +1,18 @@
-//package com.semicolon.africa.application;
+//package com.semicolon.africa.adapters.configuration;
 //
-//import org.springframework.context.annotation.Configuration;
 //
-//@Configuration
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//
+//@KeycloakConfiguration
 //@EnableWebSecurity
 //
-//public class securityConfig extends WebSecurityConigurerAdapter {
+//public class SecurityConfig{
+//
+//    @Bean
+//    public KeyCloakAuthenticationProvider keyCloakAuthenticationProvider(){
+//        return new KeyCloakAuthenticationProvider();
+//    }
+//
+//
 //}

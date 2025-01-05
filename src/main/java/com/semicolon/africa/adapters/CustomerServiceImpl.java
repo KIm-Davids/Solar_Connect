@@ -1,8 +1,8 @@
 package com.semicolon.africa.adapters;
 
 import com.semicolon.africa.adapters.Exceptions.CustomerNotFoundException;
-import com.semicolon.africa.adapters.Exceptions.CustomerNotLoggedInException;
 import com.semicolon.africa.adapters.Exceptions.InvalidDetailException;
+import com.semicolon.africa.adapters.Exceptions.UserNotLoggedInException;
 import com.semicolon.africa.adapters.validations.Validations;
 import com.semicolon.africa.domain.Customer;
 import com.semicolon.africa.domain.Review;
@@ -10,6 +10,8 @@ import com.semicolon.africa.domain.Technician;
 import com.semicolon.africa.domain.constants.LoginStatus;
 import com.semicolon.africa.ports.in.CustomerService;
 import com.semicolon.africa.ports.in.dtos.request.CreateReviewRequest;
+import com.semicolon.africa.ports.in.dtos.request.UpdateReviewRequest;
+import com.semicolon.africa.ports.in.dtos.request.customer.FindTechnicianByAvailabilityRequest;
 import com.semicolon.africa.ports.in.dtos.request.customer.LoginCustomerRequest;
 import com.semicolon.africa.ports.in.dtos.request.customer.LogoutCustomerRequest;
 import com.semicolon.africa.ports.in.dtos.request.customer.RegisterCustomerRequest;
@@ -20,12 +22,14 @@ import com.semicolon.africa.ports.out.dtos.response.*;
 import com.semicolon.africa.ports.out.dtos.response.customer.CustomerLoginResponse;
 import com.semicolon.africa.ports.out.dtos.response.customer.CustomerLogoutResponse;
 import com.semicolon.africa.ports.out.dtos.response.customer.RegisterCustomerResponse;
+import com.semicolon.africa.ports.out.dtos.response.customer.UpdateReviewResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.FindTechnicianByAvailabilityResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -92,11 +96,23 @@ public class CustomerServiceImpl implements CustomerService {
         throw new CustomerNotFoundException("Invalid Entry\nPlease try again !!!");
 
     }
-//
-//    @Override
-//    public void findTechnicianByRating(RatingFindTechnicianRequest customerRequest) {
-//
-//    }
+
+    @Override
+    public FindTechnicianByAvailabilityResponse findTechnicianByAvailability(FindTechnicianByAvailabilityRequest customerRequest) {
+        if(customerRequest.getLoginStatus().equals(LoginStatus.ONLINE)) {
+            List<Technician> technician = technicianRepositoryInterface.findTechnicianByIsAvailable(customerRequest.getAvailability());
+            FindTechnicianByAvailabilityResponse response = new FindTechnicianByAvailabilityResponse();
+//                response.setFirstName(technician.g  ());
+//                response.setLastName(technician.getLastName());
+//                response.setPhoneNumber(technician.getPhoneNumber());
+//                response.setEmail(technician.getEmail());
+
+                return response;
+
+
+        }
+        throw new UserNotLoggedInException("User not logged in");
+    }
 //
 //    @Override
 //    public void findTechnicianByLocation(LocationFindTechnicianRequest customerRequest) {
@@ -120,13 +136,20 @@ public class CustomerServiceImpl implements CustomerService {
             response.setMessage("Review Created Successfully");
             return response;
         }
-        throw new CustomerNotLoggedInException("Customer Not Logged In");
+        throw new UserNotLoggedInException("Customer Not Logged In");
 
     }
 
 
-//    @Override
-//    public void updateReview(UpdateReviewRequest customerRequest) {
-//
-//    }
+    @Override
+    public UpdateReviewResponse updateReview(UpdateReviewRequest customerRequest) {
+        Review foundReview = reviewRepository.findReviewByReviewId(customerRequest.getId());
+        foundReview.setReviewDate(LocalDate.now());
+        foundReview.setReviewCount(customerRequest.getReviewCount());
+        foundReview.setDescription(customerRequest.getDescription());
+        reviewRepository.save(foundReview);
+        UpdateReviewResponse response = new UpdateReviewResponse();
+        response.setMessage("Updated Review Successfully");
+        return response;
+    }
 }
