@@ -29,4 +29,11 @@ public class Technician extends User {
 //    @OneToOne
 //    @JoinColumn(name = "subscription_id")
 //    private Subscription subscription;
+
+    @Override
+    public String toString() {
+        return "Technician{id=" + technicianId + ", first name= '" + getFirstName() + " last name= " + getLastName() + "', isAvailable=" + isAvailable + "}";
+    }
+
+
 }

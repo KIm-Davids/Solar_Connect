@@ -5,12 +5,14 @@ import com.semicolon.africa.domain.constants.Availability;
 import com.semicolon.africa.domain.constants.LoginStatus;
 import com.semicolon.africa.ports.in.CustomerService;
 import com.semicolon.africa.ports.in.dtos.request.CreateReviewRequest;
+import com.semicolon.africa.ports.in.dtos.request.UpdateReviewRequest;
 import com.semicolon.africa.ports.in.dtos.request.customer.FindTechnicianByAvailabilityRequest;
 import com.semicolon.africa.ports.in.dtos.request.customer.LoginCustomerRequest;
 import com.semicolon.africa.ports.in.dtos.request.customer.RegisterCustomerRequest;
 import com.semicolon.africa.ports.out.dtos.response.CreateReviewResponse;
 import com.semicolon.africa.ports.out.dtos.response.customer.CustomerLoginResponse;
 import com.semicolon.africa.ports.out.dtos.response.customer.RegisterCustomerResponse;
+import com.semicolon.africa.ports.out.dtos.response.customer.UpdateReviewResponse;
 import com.semicolon.africa.ports.out.dtos.response.technician.FindTechnicianByAvailabilityResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +87,22 @@ public class CustomerServiceTest {
         request.setLoginStatus(LoginStatus.ONLINE);
 
         FindTechnicianByAvailabilityResponse response = customerService.findTechnicianByAvailability(request);
-        System.out.println(response.getTechnicianList());
+        System.out.println(response);
         assertNotNull(response);
+    }
+
+    @Test
+    public void testThatCustomerCanUpdateReview(){
+        UpdateReviewRequest request = reviewRequest();
+        UpdateReviewResponse response = customerService.updateReview(request);
+        assertNotNull(response);
+    }
+
+    private UpdateReviewRequest reviewRequest(){
+        UpdateReviewRequest request = new UpdateReviewRequest();
+        request.setId(6L);
+        request.setReviewCount(2);
+        request.setDescription("Did not fix the battery !!!!!");
+        return request;
     }
 }

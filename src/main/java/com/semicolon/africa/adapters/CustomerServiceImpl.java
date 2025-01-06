@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -102,14 +103,13 @@ public class CustomerServiceImpl implements CustomerService {
         if(customerRequest.getLoginStatus().equals(LoginStatus.ONLINE)) {
             List<Technician> technician = technicianRepositoryInterface.findTechnicianByIsAvailable(customerRequest.getAvailability());
             FindTechnicianByAvailabilityResponse response = new FindTechnicianByAvailabilityResponse();
-//                response.setFirstName(technician.g  ());
-//                response.setLastName(technician.getLastName());
-//                response.setPhoneNumber(technician.getPhoneNumber());
-//                response.setEmail(technician.getEmail());
 
+            String techniciansAsString = technician.stream()
+                    .map(Technician::toString)
+                    .collect(Collectors.joining(", "));
+
+                response.setTechnicianList(techniciansAsString);
                 return response;
-
-
         }
         throw new UserNotLoggedInException("User not logged in");
     }
