@@ -1,9 +1,6 @@
 package com.semicolon.africa.domain;
 
-import com.semicolon.africa.domain.constants.Availability;
-import com.semicolon.africa.domain.constants.SubscriptionStatus;
-import com.semicolon.africa.domain.constants.SubscriptionType;
-import com.semicolon.africa.domain.constants.UserType;
+import com.semicolon.africa.domain.constants.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +23,9 @@ public class Technician extends User {
     private Availability isAvailable;
     @OneToMany(mappedBy = "technician")
     private List<Review> review;
+    private String certificationPic;
+    private String technicianPic;
+    private String  isCertified;
 //    @OneToOne
 //    @JoinColumn(name = "subscription_id")
 //    private Subscription subscription;

@@ -11,4 +11,5 @@ public interface TechnicianRepositoryInterface extends JpaRepository<Technician,
 
     Optional<Technician> findByTechnicianId(Long id);
     List<Technician> findTechnicianByIsAvailable(Availability isAvailable);
+    Technician findTechnicianByEmail(String email);
 }

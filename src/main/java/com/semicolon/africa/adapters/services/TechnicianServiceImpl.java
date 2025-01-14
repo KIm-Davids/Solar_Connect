@@ -1,32 +1,23 @@
-package com.semicolon.africa.adapters;
+package com.semicolon.africa.adapters.services;
 
 import com.semicolon.africa.adapters.Exceptions.*;
 import com.semicolon.africa.adapters.validations.Validations;
 import com.semicolon.africa.domain.Subscription;
 import com.semicolon.africa.domain.Technician;
-import com.semicolon.africa.domain.constants.Availability;
-import com.semicolon.africa.domain.constants.LoginStatus;
-import com.semicolon.africa.domain.constants.SubscriptionStatus;
-import com.semicolon.africa.domain.constants.UserType;
+import com.semicolon.africa.domain.constants.*;
 import com.semicolon.africa.ports.in.TechnicianServiceInterface;
 import com.semicolon.africa.ports.in.dtos.request.*;
-import com.semicolon.africa.ports.in.dtos.request.technician.AvailabilityStatusRequest;
-import com.semicolon.africa.ports.in.dtos.request.technician.LoginTechnicianRequest;
-import com.semicolon.africa.ports.in.dtos.request.technician.LogoutTechnicianRequest;
-import com.semicolon.africa.ports.in.dtos.request.technician.RegisterTechnicianRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.*;
 import com.semicolon.africa.ports.out.SubscriptionRepository;
 import com.semicolon.africa.ports.out.TechnicianRepositoryInterface;
 import com.semicolon.africa.ports.out.dtos.response.*;
-import com.semicolon.africa.ports.out.dtos.response.technician.AvailabilityStatusResponse;
-import com.semicolon.africa.ports.out.dtos.response.technician.LoginTechnicianResponse;
-import com.semicolon.africa.ports.out.dtos.response.technician.LogoutTechnicianResponse;
-import com.semicolon.africa.ports.out.dtos.response.technician.RegisterTechnicianResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.*;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 
 @Service
@@ -148,7 +139,6 @@ public class TechnicianServiceImpl implements TechnicianServiceInterface {
             Subscription updatedSubscription = new Subscription();
             updatedSubscription.setTechnicianId(subscription.getTechnicianId());
             updatedSubscription.setSubscriptionType(subscription.getSubscriptionType());
-//            updatedSubscription.setSubscriptionId(subscription.getSubscriptionId());
             updatedSubscription.setStartDate(LocalDate.now());
             updatedSubscription.setEndDate(subscription.getEndDate().plusDays(30));
             updatedSubscription.setSubscriptionStatus(subscription.getSubscriptionStatus());
@@ -157,5 +147,20 @@ public class TechnicianServiceImpl implements TechnicianServiceInterface {
             return response;
         }
         throw new TechnicianNotPaidException("Invalid Command !!!");
+    }
+
+    @Override
+    public TechnicianCertificationResponse setTechnicianCertification(TechnicianCertificationRequest request) {
+        Optional<Technician> technician = technicianRepository.findByTechnicianId(request.getId());
+        if (request.getIsCertified().equals(CERTIFICATION.CERTIFIED) && technician.isPresent()) {
+            technician.get().setCertificationPic(request.getCertificationPic());
+            technician.get().setIsCertified(request.getIsCertified().toString());
+            technician.get().setTechnicianPic(request.getTechnicianPic());
+            technicianRepository.save(technician.get());
+            TechnicianCertificationResponse response = new TechnicianCertificationResponse();
+            response.setMessage("Technician Certified Successfully");
+            return response;
+        }
+        throw new CannotFIndTechnicianException("User not found");
     }
 }

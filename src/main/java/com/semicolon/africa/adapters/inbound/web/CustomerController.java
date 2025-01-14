@@ -1,6 +1,6 @@
 package com.semicolon.africa.adapters.inbound.web;
 
-import com.semicolon.africa.adapters.CustomerServiceImpl;
+import com.semicolon.africa.adapters.services.CustomerServiceImpl;
 import com.semicolon.africa.ports.in.dtos.request.CreateReviewRequest;
 import com.semicolon.africa.ports.in.dtos.request.customer.FindTechnicianByAvailabilityRequest;
 import com.semicolon.africa.ports.in.dtos.request.customer.LoginCustomerRequest;
@@ -17,11 +17,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
+@CrossOrigin(origins = {"http:localhost:8080"})
 public class CustomerController {
 
     @Autowired

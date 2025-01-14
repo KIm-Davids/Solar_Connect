@@ -1,21 +1,16 @@
 package technicanServiceTest;
 
 import com.semicolon.africa.Main;
-import com.semicolon.africa.adapters.TechnicianServiceImpl;
+import com.semicolon.africa.adapters.services.TechnicianServiceImpl;
 import com.semicolon.africa.adapters.validations.Validations;
 import com.semicolon.africa.domain.constants.Availability;
+import com.semicolon.africa.domain.constants.CERTIFICATION;
 import com.semicolon.africa.domain.constants.SubscriptionStatus;
 import com.semicolon.africa.domain.constants.SubscriptionType;
 import com.semicolon.africa.ports.in.dtos.request.*;
-import com.semicolon.africa.ports.in.dtos.request.technician.AvailabilityStatusRequest;
-import com.semicolon.africa.ports.in.dtos.request.technician.LoginTechnicianRequest;
-import com.semicolon.africa.ports.in.dtos.request.technician.LogoutTechnicianRequest;
-import com.semicolon.africa.ports.in.dtos.request.technician.RegisterTechnicianRequest;
+import com.semicolon.africa.ports.in.dtos.request.technician.*;
 import com.semicolon.africa.ports.out.dtos.response.*;
-import com.semicolon.africa.ports.out.dtos.response.technician.AvailabilityStatusResponse;
-import com.semicolon.africa.ports.out.dtos.response.technician.LoginTechnicianResponse;
-import com.semicolon.africa.ports.out.dtos.response.technician.LogoutTechnicianResponse;
-import com.semicolon.africa.ports.out.dtos.response.technician.RegisterTechnicianResponse;
+import com.semicolon.africa.ports.out.dtos.response.technician.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -127,10 +122,26 @@ public class TechnicianServicesTest {
         assertNotNull(response);
     }
 
-    private  UpdateSubscriptionRequest updateSubscriptionRequest(){
+    private UpdateSubscriptionRequest updateSubscriptionRequest(){
         UpdateSubscriptionRequest request = new UpdateSubscriptionRequest();
         request.setPaid(true);
         request.setTechnicianId(1L);
+        return request;
+    }
+
+    @Test
+    public void testThatTechnicianCanBeCertified(){
+        TechnicianCertificationRequest request = certificationRequest();
+        TechnicianCertificationResponse response = service.setTechnicianCertification(request);
+        assertNotNull(response);
+    }
+
+    private TechnicianCertificationRequest certificationRequest() {
+        TechnicianCertificationRequest request = new TechnicianCertificationRequest();
+        request.setId(1L);
+        request.setIsCertified(CERTIFICATION.CERTIFIED);
+        request.setCertificationPic("CloudDinary");
+        request.setTechnicianPic("CloudDinary");
         return request;
     }
 }

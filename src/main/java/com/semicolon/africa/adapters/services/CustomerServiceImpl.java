@@ -1,4 +1,4 @@
-package com.semicolon.africa.adapters;
+package com.semicolon.africa.adapters.services;
 
 import com.semicolon.africa.adapters.Exceptions.CustomerNotFoundException;
 import com.semicolon.africa.adapters.Exceptions.InvalidDetailException;
