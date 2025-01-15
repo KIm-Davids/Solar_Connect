@@ -1,5 +1,6 @@
 package com.semicolon.africa.adapters.inbound.web;
 
+import com.semicolon.africa.adapters.configuration.JWTService;
 import com.semicolon.africa.adapters.services.CustomerServiceImpl;
 import com.semicolon.africa.ports.in.dtos.request.CreateReviewRequest;
 import com.semicolon.africa.ports.in.dtos.request.customer.FindTechnicianByAvailabilityRequest;
@@ -26,11 +27,15 @@ public class CustomerController {
     @Autowired
     private CustomerServiceImpl customerService;
 
+    @Autowired
+    private JWTService jwtService;
+
     @PostMapping("/register-customer")
     public ResponseEntity<?> registerCustomer(@RequestBody RegisterCustomerRequest request){
         try {
             RegisterCustomerResponse response = customerService.registerCustomer(request);
-            return new ResponseEntity<>(new ApiResponse(true, response), OK);
+            String token = jwtService.generateToken(request.getEmail(), request.getCustomerId());
+            return new ResponseEntity<>(new ApiResponse(true, response, token), OK);
         }catch(Exception exception){
             return new ResponseEntity<>(new ApiResponse(false, exception.getMessage()),  HttpStatus.BAD_REQUEST);
         }

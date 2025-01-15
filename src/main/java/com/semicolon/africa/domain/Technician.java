@@ -21,11 +21,11 @@ public class Technician extends User {
     private UserType userType;
     @Enumerated(EnumType.STRING)
     private Availability isAvailable;
-    @OneToMany(mappedBy = "technician")
+    @OneToMany(mappedBy = "technician", cascade = CascadeType.ALL)
     private List<Review> review;
     private String certificationPic;
     private String technicianPic;
-    private String  isCertified;
+    private String isCertified;
 //    @OneToOne
 //    @JoinColumn(name = "subscription_id")
 //    private Subscription subscription;

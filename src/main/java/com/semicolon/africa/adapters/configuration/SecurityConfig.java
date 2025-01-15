@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults()) // Enable CORS with default settings
                 .csrf(csrf -> csrf.disable()) // Disable CSRF
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/register-technician", "/login-technician", "/logout-technician","/change-availability","/subscribe-technician")
+                        .requestMatchers("/register-technician", "/login-technician", "/logout-technician","/change-availability","/subscribe-technician", "/certify-technician", "/register-customer", "/login-customer", "/logout-customer","create-review", "search-technician")
                         .permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults()) // Basic HTTP authentication

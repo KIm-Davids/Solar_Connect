@@ -2,21 +2,26 @@ package com.semicolon.africa.adapters.services;
 
 import com.semicolon.africa.adapters.Exceptions.*;
 import com.semicolon.africa.adapters.validations.Validations;
+import com.semicolon.africa.domain.Review;
 import com.semicolon.africa.domain.Subscription;
 import com.semicolon.africa.domain.Technician;
 import com.semicolon.africa.domain.constants.*;
 import com.semicolon.africa.ports.in.TechnicianServiceInterface;
 import com.semicolon.africa.ports.in.dtos.request.*;
+import com.semicolon.africa.ports.in.dtos.request.customer.GetTechnicianReviewRequest;
 import com.semicolon.africa.ports.in.dtos.request.technician.*;
+import com.semicolon.africa.ports.out.ReviewRepository;
 import com.semicolon.africa.ports.out.SubscriptionRepository;
 import com.semicolon.africa.ports.out.TechnicianRepositoryInterface;
 import com.semicolon.africa.ports.out.dtos.response.*;
+import com.semicolon.africa.ports.out.dtos.response.customer.GetTechnicianReviewsResponse;
 import com.semicolon.africa.ports.out.dtos.response.technician.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -28,6 +33,8 @@ public class TechnicianServiceImpl implements TechnicianServiceInterface {
     private TechnicianRepositoryInterface technicianRepository;
     @Autowired
     private SubscriptionRepository subscriptionRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @Override
     public RegisterTechnicianResponse registerTechnician(RegisterTechnicianRequest request) {
@@ -162,5 +169,14 @@ public class TechnicianServiceImpl implements TechnicianServiceInterface {
             return response;
         }
         throw new CannotFIndTechnicianException("User not found");
+    }
+
+    @Override
+    public GetTechnicianReviewsResponse getTechnicianReviews(GetTechnicianReviewRequest request){
+        List<Review> reviewList = reviewRepository.findReviewByTechnician_TechnicianId(request.getTechnicianId());
+        GetTechnicianReviewsResponse response = new GetTechnicianReviewsResponse();
+        response.setMessage("Technician Reviews:");
+        response.setReviewList(reviewList);
+        return response;
     }
 }

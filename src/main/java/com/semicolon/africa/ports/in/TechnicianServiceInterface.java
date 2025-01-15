@@ -2,8 +2,10 @@ package com.semicolon.africa.ports.in;
 
 
 import com.semicolon.africa.ports.in.dtos.request.*;
+import com.semicolon.africa.ports.in.dtos.request.customer.GetTechnicianReviewRequest;
 import com.semicolon.africa.ports.in.dtos.request.technician.*;
 import com.semicolon.africa.ports.out.dtos.response.*;
+import com.semicolon.africa.ports.out.dtos.response.customer.GetTechnicianReviewsResponse;
 import com.semicolon.africa.ports.out.dtos.response.technician.*;
 import org.springframework.stereotype.Service;
 
@@ -17,4 +19,6 @@ public interface TechnicianServiceInterface {
     SubscriptionResponse subscribe(SubscriptionRequest technicianSubscriptionRequest);
     SubscriptionResponse updateSubscription(UpdateSubscriptionRequest request);
     TechnicianCertificationResponse setTechnicianCertification(TechnicianCertificationRequest request);
+    GetTechnicianReviewsResponse getTechnicianReviews(GetTechnicianReviewRequest request);
+
 }

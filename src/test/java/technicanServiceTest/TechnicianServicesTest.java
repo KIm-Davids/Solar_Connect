@@ -8,8 +8,11 @@ import com.semicolon.africa.domain.constants.CERTIFICATION;
 import com.semicolon.africa.domain.constants.SubscriptionStatus;
 import com.semicolon.africa.domain.constants.SubscriptionType;
 import com.semicolon.africa.ports.in.dtos.request.*;
+import com.semicolon.africa.ports.in.dtos.request.customer.GetTechnicianReviewRequest;
 import com.semicolon.africa.ports.in.dtos.request.technician.*;
+import com.semicolon.africa.ports.out.ReviewRepository;
 import com.semicolon.africa.ports.out.dtos.response.*;
+import com.semicolon.africa.ports.out.dtos.response.customer.GetTechnicianReviewsResponse;
 import com.semicolon.africa.ports.out.dtos.response.technician.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,8 @@ public class TechnicianServicesTest {
 
     @Autowired
     private TechnicianServiceImpl service;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @Test
     public void testTechnicianEmailIsCorrect(){
@@ -47,8 +52,8 @@ public class TechnicianServicesTest {
 //        request.setId(1L);
         request.setFirstName("tammy");
         request.setLastName("Abraham");
-        request.setEmail("tammy@gmail.com");
-        request.setPhoneNumber("09114142376");
+        request.setEmail("tammy1@gmail.com");
+        request.setPhoneNumber("09014142376");
         request.setPassword("1234");
         request.setNin("12345");
         request.setLocation("312 Hebert Macauley way, yaba ");
@@ -142,6 +147,20 @@ public class TechnicianServicesTest {
         request.setIsCertified(CERTIFICATION.CERTIFIED);
         request.setCertificationPic("CloudDinary");
         request.setTechnicianPic("CloudDinary");
+        return request;
+    }
+
+    @Test
+    public void testThatTechnicianReviewsAreDisplayed(){
+        GetTechnicianReviewRequest request = getTechnicianReviewRequest();
+        GetTechnicianReviewsResponse response = service.getTechnicianReviews(request);
+        System.out.println(response);
+        assertNotNull(response);
+    }
+
+    private GetTechnicianReviewRequest getTechnicianReviewRequest(){
+        GetTechnicianReviewRequest request = new GetTechnicianReviewRequest();
+        request.setTechnicianId(1L);
         return request;
     }
 }

@@ -16,6 +16,7 @@ import com.semicolon.africa.ports.out.dtos.response.customer.UpdateReviewRespons
 import com.semicolon.africa.ports.out.dtos.response.technician.FindTechnicianByAvailabilityResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
@@ -23,6 +24,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(classes = Main.class)
+@EntityScan(basePackages = "com.semicolon.africa.domain")
 public class CustomerServiceTest {
 
     @Autowired
@@ -40,10 +42,10 @@ public class CustomerServiceTest {
         request.setFirstName("Michael");
         request.setLastName("Davids");
         request.setNin("01245");
-        request.setEmail("gmail@email.com");
+        request.setEmail("gmail1@email.com");
         request.setLocation("312 hebert macauley street yaba");
         request.setPassword("michael");
-        request.setPhoneNumber("08022222946");
+        request.setPhoneNumber("08022222996");
         return request;
     }
 
@@ -64,7 +66,7 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void  testThatCustomerCanMakeReview(){
+    public void testThatCustomerCanMakeReview(){
         CreateReviewRequest request = createCustomerReview();
         CreateReviewResponse response = customerService.createReview(request);
         assertNotNull(response);

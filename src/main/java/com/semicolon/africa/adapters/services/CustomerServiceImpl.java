@@ -11,18 +11,12 @@ import com.semicolon.africa.domain.constants.LoginStatus;
 import com.semicolon.africa.ports.in.CustomerService;
 import com.semicolon.africa.ports.in.dtos.request.CreateReviewRequest;
 import com.semicolon.africa.ports.in.dtos.request.UpdateReviewRequest;
-import com.semicolon.africa.ports.in.dtos.request.customer.FindTechnicianByAvailabilityRequest;
-import com.semicolon.africa.ports.in.dtos.request.customer.LoginCustomerRequest;
-import com.semicolon.africa.ports.in.dtos.request.customer.LogoutCustomerRequest;
-import com.semicolon.africa.ports.in.dtos.request.customer.RegisterCustomerRequest;
+import com.semicolon.africa.ports.in.dtos.request.customer.*;
 import com.semicolon.africa.ports.out.CustomerRepository;
 import com.semicolon.africa.ports.out.ReviewRepository;
 import com.semicolon.africa.ports.out.TechnicianRepositoryInterface;
 import com.semicolon.africa.ports.out.dtos.response.*;
-import com.semicolon.africa.ports.out.dtos.response.customer.CustomerLoginResponse;
-import com.semicolon.africa.ports.out.dtos.response.customer.CustomerLogoutResponse;
-import com.semicolon.africa.ports.out.dtos.response.customer.RegisterCustomerResponse;
-import com.semicolon.africa.ports.out.dtos.response.customer.UpdateReviewResponse;
+import com.semicolon.africa.ports.out.dtos.response.customer.*;
 import com.semicolon.africa.ports.out.dtos.response.technician.FindTechnicianByAvailabilityResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -128,9 +123,10 @@ public class CustomerServiceImpl implements CustomerService {
             technician.setTechnicianId(customerRequest.getTechnicianId());
             review.setReviewDate(LocalDate.now());
             review.setDescription(customerRequest.getDescription());
-            review.setTechnician(technician);
             review.setCustomerId(customerRequest.getCustomerId());
             review.setRating(customerRequest.getRating());
+            review.setTechnicianId(customerRequest.getTechnicianId());
+            review.setTechnician(customerRequest.getTechnician());
             reviewRepository.save(review);
             CreateReviewResponse response = new CreateReviewResponse();
             response.setMessage("Review Created Successfully");
@@ -139,7 +135,6 @@ public class CustomerServiceImpl implements CustomerService {
         throw new UserNotLoggedInException("Customer Not Logged In");
 
     }
-
 
     @Override
     public UpdateReviewResponse updateReview(UpdateReviewRequest customerRequest) {
@@ -152,4 +147,7 @@ public class CustomerServiceImpl implements CustomerService {
         response.setMessage("Updated Review Successfully");
         return response;
     }
+
+
+
 }
